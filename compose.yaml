@@ -1,0 +1,13 @@
+services:
+  mpn_json_creator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mpn_json_creator
+    image: mpn_json_creator:latest
+    ports:
+      - 5299:5299
+    restart: unless-stopped
+    environment:
+      - Europe/Kyiv
+networks: {}

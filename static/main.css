@@ -1,0 +1,398 @@
+:root {
+    /* Color Variables */
+    --mred: #FF9D9F;
+    --myellow: #FFD38C;
+    --mgreen: #CBE070;
+    --mdarkgreen: #11893A;
+    --mdarkred: #C53131;
+    --mblue: #9FADE3;
+    --mviolet: #AE8FC0;
+    --mdarkblue: #0881d8;
+    --mbutbkghv: #0056b3;
+    --mbutbkgac: #003d7a;
+    --mmesborder: #ccc;
+    --primary: #00A4E9; /* Blue */
+    --success: #00D672; /* Green */
+    --warning: #FF6433; /* Orange */
+    --error: #FF2337; /* Red */
+    --secondary: #F8AE3C; /* Yellow */
+    --bgyellow: #FFCD66;
+    --bbyellow: #E0A424;
+    --bggreen: #64B461;
+    --bbgreen: #3E943B;
+    --bgred: #ff2337;
+    --bbred: #B81422;
+    --bgorange: #FF6433;
+    --bborange: #C43D1C;
+    --bgwhite: #F5F5F5;
+    --bggrey: #CFCFCF;
+}
+
+/* --- Dark Theme --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-scheme-background: #252525;
+        --color-scheme-text-color: #EFEFEF;
+        --placeholder: #EFEFEF;
+        --mapp: #B9B9C8;
+        --mmessage: #2b2b2b;
+        --mdesc: #B9B9C8;
+        --mbkg: #383838;
+        --msbkg: #2B2B2B;
+        --mhbkg: #454545;
+        --mhbor: #FF595E;
+        --mborder: #666666;
+        --mactive: #B9B9C8;
+        --minactive: #FF5C5F;
+        --mexited: #F9B236;
+        --mmenu: #838282;
+        --hoo: #454545;
+        --imgbkg: #2B2B2B;
+        --mheader: #000000;
+        --msearch: #3B3B3B;
+        --mplaceholdertext: #C9C9C9;
+    }
+}
+
+/* --- Light Theme --- */
+@media (prefers-color-scheme: light) {
+    :root {
+        --color-scheme-background: #F8F8F8;
+        --color-scheme-text-color: #555657;
+        --placeholder: #555657;
+        --mapp: #313140;
+        --mmessage: #e1e1e1;
+        --mdesc: #696969;
+        --mbkg: #F5F5F5;
+        --msbkg: #FCFCFC;
+        --mhbkg: #EEEEEE;
+        --mhbor: #FF6368;
+        --mborder: #CFCFCF;
+        --mmenu: #909090;
+        --mactive: #5E6E18;
+        --minactive: #FF5C5F;
+        --mexited: #F9B236;
+        --hoo: #FBFBFB;
+        --imgbkg: #EBEBEB;
+        --mheader: #FFFFFF;
+        --msearch: #FBFBFB;
+        --mplaceholdertext: #808080;
+    }
+}
+
+html {
+  background: var(--color-scheme-background);
+  color: var(--color-scheme-text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.25;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+body {
+  margin: 8px 18px;
+  max-width: 760px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+header h1, h1 {
+  margin: 6px 0 2px;
+  color: var(--placeholder);
+  font-size: 1.2rem;
+}
+
+pre {
+  position: relative;
+  width: 100%;
+  background: var(--mhbkg);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--mborder);
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 5px 0 12px;
+}
+
+table input {
+    width: 100%;
+    color: var(--color-scheme-text-color);
+    padding: 4px 6px;
+    font-family: monospace;
+    background: var(--mhbkg);
+    border: 1px solid var(--mborder);
+    border-radius: 4px;
+}
+
+/* --- Base Icon Button Styles (Merged) --- */
+.copy-icon,
+.download-icon,
+.test-icon,
+.clear-icon {
+    color: var(--mborder);
+    background-color: transparent;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-out;
+    width: 12px;
+    height: 12px;
+    position: relative;
+}
+
+
+@media (min-width: 761px) {
+    .copy-icon[data-tooltip]:hover::after,
+    .download-icon[data-tooltip]:hover::after,
+    .test-icon[data-tooltip]:hover::after,
+    .clear-icon[data-tooltip]:hover::after {
+        
+        content: attr(data-tooltip);
+        transform: translateX(-50%); 
+
+        padding: 4px 10px;
+        border: 1px solid var(--mborder); 
+        background: var(--color-scheme-text-color);
+        color: var(--color-scheme-background); 
+        border-radius: 4px;
+
+        position: absolute;
+        bottom: -35px; /
+        left: 50%;
+        
+
+        white-space: nowrap; 
+        z-index: 20;
+        font-size: 12px;
+        
+    }
+}
+/* --- SVG Image Styles (Merged) --- */
+.copy-icon img.icon-svg,
+.download-icon img.icon-svg,
+.test-icon img.icon-svg, 
+.clear-icon img.icon-svg {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    transition: all 0.2s ease-out;
+}
+
+/* --- Hover/Active/Copied/Downloaded States (Merged) --- */
+.copy-icon:hover img.icon-svg,
+.copy-icon.copied img.icon-svg,
+.download-icon:hover img.icon-svg,
+.download-icon.downloaded img.icon-svg,
+.test-icon:hover img.icon-svg,
+.clear-icon:hover img.icon-svg {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Test button specific animation */
+.test-icon.testing img.icon-svg {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Dark Theme Icon Filters (Merged) */
+@media (prefers-color-scheme: dark) {
+    .copy-icon img.icon-svg,
+    .download-icon img.icon-svg,
+    .test-icon img.icon-svg,
+    .clear-icon img.icon-svg {
+        filter: invert(80%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%);
+    }
+}
+
+/* Light Theme Icon Filters (Merged) */
+@media (prefers-color-scheme: light) {
+    .copy-icon img.icon-svg,
+    .download-icon img.icon-svg,
+    .test-icon img.icon-svg,
+    .clear-icon img.icon-svg {
+        filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%);
+    }
+}
+
+.copy-buttons {
+    gap: 8px;
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.9rem;
+    z-index: 1000;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease;
+}
+
+.notification.success {
+    background: var(--mdarkgreen);
+}
+
+.notification.error {
+    background: var(--bbred);
+}
+
+.notification.warning {
+    background: var(--bborange);
+}
+
+.notification.info {
+    background: var(--mdarkblue);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Common input styling for all URL/Token fields */
+#tg-token, #tg-chat, #ds-url, #pm-url,
+#mt-url, #rc-url, #sl-url, #fl-token,
+#zp-sub, #zp-api, #pb-token, #wn-channel,
+#wn-url, #ph-token, #ph-user_key, #gt-url,
+#gt-token, #nt-url, #nt-sub, #ap-url,
+#ap-conf, #mx-token, #mx-url, #mx-room  {
+  width: 100%;
+  font-family: monospace;
+  background: var(--msbkg);
+  border-color: var(--msbkg);
+  border-radius: 0;
+}
+
+#tg-token:focus, #tg-chat:focus, #ds-url:focus, #pm-url:focus,
+#mt-url:focus, #rc-url:focus, #sl-url:focus, #fl-token:focus,
+#zp-sub:focus, #zp-api:focus, #pb-token:focus, #wn-channel:focus,
+#wn-url:focus, #ph-token:focus, #ph-user_key:focus, #gt-url:focus,
+#gt-token:focus, #nt-url:focus, #nt-sub:focus, #ap-url:focus,
+#ap-conf:focus, #mx-token:focus, #mx-url:focus, #mx-room:focus {
+  outline: none;
+  color: var(--mapp);
+  background: var(--mhbkg);
+  border-bottom: 1px solid var(--primary);
+  border-radius: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2px;
+  table-layout: fixed;
+}
+
+th, td {
+  border: 1px solid var(--mborder);
+  padding: 8px;
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+/* First column: 35% width */
+th:first-child,
+td:first-child {
+  width: 35%;
+}
+
+/* Second column: 65% width */
+th:nth-child(2),
+td:nth-child(2) {
+  width: 65%;
+}
+
+th {
+  background: var(--mhbkg);
+  font-weight: 600;
+}
+
+.required {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* --- Copy Container Layout --- */
+.copy-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* --- Button Group (Download + Copy) Positioning --- */
+.copy-buttons {
+    display: flex;
+    gap: 8px;
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 10;
+}
+
+/* --- Pre Element Adjustments to make room for buttons --- */
+.copy-container pre {
+    padding-right: 10px;
+    margin-top: 0;
+}
+
+code { font-family: "Courier New", monospace; }
+
+.placeholder {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0 0 10px;
+  color: var(--mplaceholdertext);
+  font-size: 0.9rem;
+}
+
+.panel {
+  background: var(--msbkg);
+  padding: 8px;
+  border: 1px solid var(--mborder);
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--mborder);
+  background: var(--mhbkg);
+  color: var(--mplaceholdertext);
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+footer.copyright {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+  color: var(--mborder);
+  font-size: 0.8rem;
+}

@@ -1,0 +1,17 @@
+nano /etc/systemd/system/mpn_json_creator.service
+
+[Unit]
+Description=Multi-Platform Notification JSON Creator
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 /opt/mpn_json_creator/mpn_json_creator.py
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl daemon-reload
+systemctl enable mpn_json_creator.service
+systemctl restart mpn_json_creator.service

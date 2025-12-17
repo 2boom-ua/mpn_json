@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <title>MPN JSON Creator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='mstile-144x144.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}" />
+</head>
+<body>
+
+<!-- ================= TELEGRAM ================= -->
+<section class="panel" id="telegram-panel">
+    <h1>Telegram</h1>
+    <p class="subtitle">is a fast, secure messaging app with cloud sync, groups, channels, and bots.</p>
+    
+    <div class="copy-container">
+        <pre><code id="telegram-code">{
+  "TELEGRAM": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "https://api.telegram.org/bot<span class="placeholder">{TOKEN}</span>/sendMessage"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{
+      "chat_id": "<span class="placeholder">{CHAT_ID}</span>",
+      "text": "message",
+      "parse_mode": "Markdown"
+    }],
+    "FORMAT_MESSAGE": ["simplified"]
+  }
+}</code></pre>
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="telegram" data-target="telegram-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="telegram" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="telegram-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">TOKEN</td><td><input type="text" id="tg-token" placeholder="Paste your bot TOKEN (e.g., 1234567890:ABC...)"/></td></tr>
+        <tr><td class="required">CHAT_ID</td><td><input type="text" id="tg-chat" placeholder="Paste your Chat_ID (e.g., -1001234567890)" /></td></tr>
+    </table>
+    
+    <script>
+    const telegramCode = document.getElementById("telegram-code");
+    const telegramTemplate = telegramCode.innerHTML;
+    
+    function updateTelegramJSON() {
+        let html = telegramTemplate;
+        const token = document.getElementById("tg-token").value.trim();
+        const chat = document.getElementById("tg-chat").value.trim();
+    
+        if (token) {
+            html = html.replace(
+                '<span class="placeholder">{TOKEN}</span>', 
+                `<span style="color: var(--primary); font-weight: 600;">${token}</span>`
+            );
+        }
+        if (chat) {
+            html = html.replace(
+                '<span class="placeholder">{CHAT_ID}</span>', 
+                `<span style="color: var(--primary); font-weight: 600;">${chat}</span>`
+            );
+        }
+        telegramCode.innerHTML = html;
+    }
+    
+    document.getElementById("tg-token").addEventListener("input", updateTelegramJSON);
+    document.getElementById("tg-chat").addEventListener("input", updateTelegramJSON);
+
+    // Scoped clear button
+    document.querySelector('#telegram-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("tg-token").value = "";
+        document.getElementById("tg-chat").value = "";
+        telegramCode.innerHTML = telegramTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= DISCORD ================= -->
+<section class="panel" id="discord-panel">
+    <h1>Discord</h1>
+    <p class="subtitle">is a chat platform for communities, with text, voice, and bots.</p>
+    
+    <div class="copy-container">
+        <pre><code id="discord-code">{
+  "DISCORD": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{WEBHOOK_URL}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{"content": "message"}],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="discord" data-target="discord-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="discord" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="discord-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">WEBHOOK_URL</td><td><input type="text" id="ds-url" placeholder="Paste Webhook URL starting with https://..."/></td></tr>
+    </table>
+    
+    <script>
+    const discordCode = document.getElementById("discord-code");
+    const discordTemplate = discordCode.innerHTML;
+    
+    function updateDiscordJSON() {
+        let html = discordTemplate;
+        const url = document.getElementById("ds-url").value.trim();
+    
+        if (url) {
+            html = html.replace(
+                '<span class="placeholder">{WEBHOOK_URL}</span>', 
+                `<span style="color: var(--primary); font-weight: 600;">${url}</span>`
+            );
+        }
+        discordCode.innerHTML = html;
+    }
+    
+    document.getElementById("ds-url").addEventListener("input", updateDiscordJSON);
+
+    // Scoped clear button
+    document.querySelector('#discord-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("ds-url").value = "";
+        discordCode.innerHTML = discordTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= MATRIX ================= -->
+<section class="panel" id="matrix-panel">
+    <h1>Matrix</h1>
+    <p class="subtitle">is a decentralized, open messaging network for secure, real-time chat across servers.</p>
+    
+    <div class="copy-container">
+        <pre><code id="matrix-code">{
+  "MATRIX": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{SERVER_URL}</span>/_matrix/client/r0/rooms/<span class="placeholder">{ROOM_ID}</span>/send/m.room.message?access_token=<span class="placeholder">{TOKEN}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{
+      "msgtype": "m.text",
+      "body": "message",
+      "format": "org.matrix.custom.html",
+      "formatted_body": "message"
+    }],
+    "FORMAT_MESSAGE": ["html"]
+  }
+}</code></pre>
+    
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="matrix" data-target="matrix-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="matrix" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="matrix-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SERVER_URL</td><td><input type="text" id="mx-url" placeholder="Paste Server URL starting with https://..."/></td></tr>
+        <tr><td class="required">TOKEN</td><td><input type="text" id="mx-token" placeholder="Paste your Token (e.g., syt_abc123...)"/></td></tr>
+        <tr><td class="required">ROOM_ID</td><td><input type="text" id="mx-room" placeholder="Paste your Room ID (e.g., !ab123../#ac123..)"/></td></tr>
+    </table>
+    
+    <script>
+    const matrixCode = document.getElementById("matrix-code");
+    const matrixTemplate = matrixCode.innerHTML;
+    
+    function updateMatrixJSON() {
+        let html = matrixTemplate;
+        const token = document.getElementById("mx-token").value.trim();
+        const server_url = document.getElementById("mx-url").value.trim();
+        const room_id = document.getElementById("mx-room").value.trim();
+    
+        if (token) html = html.replace('<span class="placeholder">{TOKEN}</span>', `<span style="color: var(--primary); font-weight: 600;">${token}</span>`);
+        if (server_url) html = html.replace('<span class="placeholder">{SERVER_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${server_url}</span>`);
+        if (room_id) html = html.replace('<span class="placeholder">{ROOM_ID}</span>', `<span style="color: var(--primary); font-weight: 600;">${room_id}</span>`);
+        
+        matrixCode.innerHTML = html;
+    }
+    
+    document.getElementById("mx-token").addEventListener("input", updateMatrixJSON);
+    document.getElementById("mx-url").addEventListener("input", updateMatrixJSON);
+    document.getElementById("mx-room").addEventListener("input", updateMatrixJSON);
+
+    // Scoped clear button
+    document.querySelector('#matrix-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("mx-token").value = "";
+        document.getElementById("mx-url").value = "";
+        document.getElementById("mx-room").value = "";
+        matrixCode.innerHTML = matrixTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= APPRISE ================= -->
+<section class="panel" id="apprise-panel">
+    <h1>Apprise</h1>
+    <p class="subtitle">is a notification service that sends messages to many platforms from one configuration.</p>
+    
+    <div class="copy-container">
+        <pre><code id="apprise-code">{
+  "APPRISE": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{SERVER_URL}</span>/notify/<span class="placeholder">{CONFIG_ID}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{
+      "body": "message",
+      "type": "info",
+      "format": "markdown"
+    }],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="apprise" data-target="apprise-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="apprise" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="apprise-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SERVER_URL</td><td><input type="text" id="ap-url" placeholder="Paste Server URL starting with https://..."/></td></tr>
+        <tr><td class="required">CONFIG_ID</td><td><input type="text" id="ap-conf" placeholder="Paste your Config ID (e.g., abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const appriseCode = document.getElementById("apprise-code");
+    const appriseTemplate = appriseCode.innerHTML;
+    
+    function updateAppriseJSON() {
+        let html = appriseTemplate;
+        const conf = document.getElementById("ap-conf").value.trim();
+        const url = document.getElementById("ap-url").value.trim();
+    
+        if (conf) html = html.replace('<span class="placeholder">{CONFIG_ID}</span>', `<span style="color: var(--primary); font-weight: 600;">${conf}</span>`);
+        if (url) html = html.replace('<span class="placeholder">{SERVER_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        
+        appriseCode.innerHTML = html;
+    }
+    
+    document.getElementById("ap-conf").addEventListener("input", updateAppriseJSON);
+    document.getElementById("ap-url").addEventListener("input", updateAppriseJSON);
+
+    // Scoped clear button
+    document.querySelector('#apprise-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("ap-url").value = "";
+        document.getElementById("ap-conf").value = "";
+        appriseCode.innerHTML = appriseTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= NTFY ================= -->
+<section class="panel" id="ntfy-panel">
+    <h1>Ntfy</h1>
+    <p class="subtitle">is a simple publish/subscribe notification service using HTTP.</p>
+    
+    <div class="copy-container">
+        <pre><code id="ntfy-code">{
+  "NTFY": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{SERVER_URL}</span>/<span class="placeholder">{SUBSCRIBE}</span>"
+    ],
+    "HEADER": [{"Content-Type": "text/markdown"}],
+    "PAYLOAD": [{"data": "message"}],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="ntfy" data-target="ntfy-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="ntfy" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="ntfy-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SERVER_URL</td><td><input type="text" id="nt-url" placeholder="Paste Server URL starting with https://..."/></td></tr>
+        <tr><td class="required">SUBSCRIBE</td><td><input type="text" id="nt-sub" placeholder="Paste your Topic Name (e.g., abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const ntfyCode = document.getElementById("ntfy-code");
+    const ntfyTemplate = ntfyCode.innerHTML;
+    
+    function updateNtfyJSON() {
+        let html = ntfyTemplate;
+        const sub = document.getElementById("nt-sub").value.trim();
+        const url = document.getElementById("nt-url").value.trim();
+    
+        if (sub) html = html.replace('<span class="placeholder">{SUBSCRIBE}</span>', `<span style="color: var(--primary); font-weight: 600;">${sub}</span>`);
+        if (url) html = html.replace('<span class="placeholder">{SERVER_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        
+        ntfyCode.innerHTML = html;
+    }
+    
+    document.getElementById("nt-sub").addEventListener("input", updateNtfyJSON);
+    document.getElementById("nt-url").addEventListener("input", updateNtfyJSON);
+
+    // Scoped clear button
+    document.querySelector('#ntfy-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("nt-url").value = "";
+        document.getElementById("nt-sub").value = "";
+        ntfyCode.innerHTML = ntfyTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= PUMBLE ================= -->
+<section class="panel" id="pumble-panel">
+    <h1>Pumble</h1>
+    <p class="subtitle">is a team chat platform for messaging and collaboration.</p>
+    
+    <div class="copy-container">
+        <pre><code id="pumble-code">{
+  "PUMBLE": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{WEBHOOK_URL}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{"text": "message"}],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="pumble" data-target="pumble-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="pumble" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="pumble-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">WEBHOOK_URL</td><td><input type="text" id="pm-url" placeholder="Paste Webhook URL starting with https://..."/></td></tr>
+    </table>
+    
+    <script>
+    const pumbleCode = document.getElementById("pumble-code");
+    const pumbleTemplate = pumbleCode.innerHTML;
+    
+    function updatePumbleJSON() {
+        let html = pumbleTemplate;
+        const url = document.getElementById("pm-url").value.trim();
+    
+        if (url) html = html.replace('<span class="placeholder">{WEBHOOK_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        
+        pumbleCode.innerHTML = html;
+    }
+    
+    document.getElementById("pm-url").addEventListener("input", updatePumbleJSON);
+
+    // Scoped clear button
+    document.querySelector('#pumble-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("pm-url").value = "";
+        pumbleCode.innerHTML = pumbleTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= MATTERMOST ================= -->
+<section class="panel" id="mattermost-panel">
+    <h1>Mattermost</h1>
+    <p class="subtitle">is an open-source team messaging platform for secure collaboration.</p>
+    
+    <div class="copy-container">
+        <pre><code id="mattermost-code">{
+  "MATTERMOST": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{WEBHOOK_URL}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{"text": "message"}],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="mattermost" data-target="mattermost-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="mattermost" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="mattermost-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">WEBHOOK_URL</td><td><input type="text" id="mt-url" placeholder="Paste Webhook URL starting with https://..."/></td></tr>
+    </table>
+    
+    <script>
+    const mattermostCode = document.getElementById("mattermost-code");
+    const mattermostTemplate = mattermostCode.innerHTML;
+    
+    function updateMattermostJSON() {
+        let html = mattermostTemplate;
+        const url = document.getElementById("mt-url").value.trim();
+    
+        if (url) html = html.replace('<span class="placeholder">{WEBHOOK_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        
+        mattermostCode.innerHTML = html;
+    }
+    
+    document.getElementById("mt-url").addEventListener("input", updateMattermostJSON);
+
+    // Scoped clear button
+    document.querySelector('#mattermost-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("mt-url").value = "";
+        mattermostCode.innerHTML = mattermostTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= ZULIP ================= -->
+<section class="panel" id="zulip-panel">
+    <h1>Zulip</h1>
+    <p class="subtitle">is a team chat platform with topic-based threaded conversations.</p>
+    
+    <div class="copy-container">
+        <pre><code id="zulip-code">{
+  "ZULIP": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{SUBDOMAIN}</span>.zulipchat.com/api/v1/external/slack_incoming?api_key=<span class="placeholder">{API_KEY}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{"text": "message"}],
+    "FORMAT_MESSAGE": ["simplified"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="zulip" data-target="zulip-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="zulip" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="zulip-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SUBDOMAIN</td><td><input type="text" id="zp-sub" placeholder="Paste Subdomain (e.g., https://subdomain.zulipchat.com...)"/></td></tr>
+        <tr><td class="required">API_KEY</td><td><input type="text" id="zp-api" placeholder="Paste your API_KEY (e.g., 7Qn5y16j...)" /></td></tr>
+    </table>
+    
+    <script>
+    const zulipCode = document.getElementById("zulip-code");
+    const zulipTemplate = zulipCode.innerHTML;
+    
+    function updateZulipJSON() {
+        let html = zulipTemplate;
+        const subdomain = document.getElementById("zp-sub").value.trim();
+        const api_key = document.getElementById("zp-api").value.trim();
+    
+        if (subdomain) html = html.replace('<span class="placeholder">{SUBDOMAIN}</span>', `<span style="color: var(--primary); font-weight: 600;">${subdomain}</span>`);
+        if (api_key) html = html.replace('<span class="placeholder">{API_KEY}</span>', `<span style="color: var(--primary); font-weight: 600;">${api_key}</span>`);
+        
+        zulipCode.innerHTML = html;
+    }
+    
+    document.getElementById("zp-sub").addEventListener("input", updateZulipJSON);
+    document.getElementById("zp-api").addEventListener("input", updateZulipJSON);
+
+    // Scoped clear button
+    document.querySelector('#zulip-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("zp-sub").value = "";
+        document.getElementById("zp-api").value = "";
+        zulipCode.innerHTML = zulipTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= FLOCK ================= -->
+<section class="panel" id="flock-panel">
+    <h1>Flock</h1>
+    <p class="subtitle">is a team messaging and collaboration platform.</p>
+    
+    <div class="copy-container">
+        <pre><code id="flock-code">{
+  "FLOCK": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "https://api.flock.com/hooks/sendMessage/<span class="placeholder">{TOKEN}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{"text": "message"}],
+    "FORMAT_MESSAGE": ["simplified"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="flock" data-target="flock-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="flock" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="flock-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">TOKEN</td><td><input type="text" id="fl-token" placeholder="Paste your Webhook Token (e.g., abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const flockCode = document.getElementById("flock-code");
+    const flockTemplate = flockCode.innerHTML;
+    
+    function updateFlockJSON() {
+        let html = flockTemplate;
+        const token = document.getElementById("fl-token").value.trim();
+    
+        if (token) html = html.replace('<span class="placeholder">{TOKEN}</span>', `<span style="color: var(--primary); font-weight: 600;">${token}</span>`);
+        
+        flockCode.innerHTML = html;
+    }
+    
+    document.getElementById("fl-token").addEventListener("input", updateFlockJSON);
+
+    // Scoped clear button
+    document.querySelector('#flock-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("fl-token").value = "";
+        flockCode.innerHTML = flockTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= SLACK ================= -->
+<section class="panel" id="slack-panel">
+    <h1>Slack</h1>
+    <p class="subtitle">is a team messaging platform with channels and integrations.</p>
+    
+    <div class="copy-container">
+        <pre><code id="slack-code">{
+  "SLACK": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{WEBHOOK_URL}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{
+      "text": "message",
+      "mrkdwn": true
+    }],
+    "FORMAT_MESSAGE": ["simplified"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="slack" data-target="slack-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="slack" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="slack-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">WEBHOOK_URL</td><td><input type="text" id="sl-url" placeholder="Paste Webhook URL starting with https://..."/></td></tr>
+    </table>
+    
+    <script>
+    const slackCode = document.getElementById("slack-code");
+    const slackTemplate = slackCode.innerHTML;
+    
+    function updateSlackJSON() {
+        let html = slackTemplate;
+        const url = document.getElementById("sl-url").value.trim();
+    
+        if (url) html = html.replace('<span class="placeholder">{WEBHOOK_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        
+        slackCode.innerHTML = html;
+    }
+    
+    document.getElementById("sl-url").addEventListener("input", updateSlackJSON);
+
+    // Scoped clear button
+    document.querySelector('#slack-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("sl-url").value = "";
+        slackCode.innerHTML = slackTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= ROCKET.CHAT ================= -->
+<section class="panel" id="rocket-panel">
+    <h1>Rocket.Chat</h1>
+    <p class="subtitle">is an open-source team messaging and collaboration platform.</p>
+    
+    <div class="copy-container">
+        <pre><code id="rocket-code">{
+  "ROCKET.CHAT": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{WEBHOOK_URL}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{"text": "message"}],
+    "FORMAT_MESSAGE": ["simplified"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="rocket" data-target="rocket-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="rocket" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="rocket-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">WEBHOOK_URL</td><td><input type="text" id="rc-url" placeholder="Paste Webhook URL starting with https://..."/></td></tr>
+    </table>
+    
+    <script>
+    const rocketCode = document.getElementById("rocket-code");
+    const rocketTemplate = rocketCode.innerHTML;
+    
+    function updateRocketJSON() {
+        let html = rocketTemplate;
+        const url = document.getElementById("rc-url").value.trim();
+    
+        if (url) html = html.replace('<span class="placeholder">{WEBHOOK_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        
+        rocketCode.innerHTML = html;
+    }
+    
+    document.getElementById("rc-url").addEventListener("input", updateRocketJSON);
+
+    // Scoped clear button
+    document.querySelector('#rocket-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("rc-url").value = "";
+        rocketCode.innerHTML = rocketTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= GOTIFY ================= -->
+<section class="panel" id="gotify-panel">
+    <h1>Gotify</h1>
+    <p class="subtitle">is a self-hosted server for sending real-time notifications.</p>
+    
+    <div class="copy-container">
+        <pre><code id="gotify-code">{
+  "GOTIFY": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{SERVER_URL}</span>/message?token=<span class="placeholder">{TOKEN}</span>"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{
+      "title": "title",
+      "message": "message",
+      "priority": 0
+    }],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="gotify" data-target="gotify-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="gotify" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="gotify-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SERVER_URL</td><td><input type="text" id="gt-url" placeholder="Paste Server URL starting with https://..."/></td></tr>
+        <tr><td class="required">TOKEN</td><td><input type="text" id="gt-token" placeholder="Paste your App Token (e.g., abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const gotifyCode = document.getElementById("gotify-code");
+    const gotifyTemplate = gotifyCode.innerHTML;
+    
+    function updateGotifyJSON() {
+        let html = gotifyTemplate;
+        const token = document.getElementById("gt-token").value.trim();
+        const server_url = document.getElementById("gt-url").value.trim();
+    
+        if (token) html = html.replace('<span class="placeholder">{TOKEN}</span>', `<span style="color: var(--primary); font-weight: 600;">${token}</span>`);
+        if (server_url) html = html.replace('<span class="placeholder">{SERVER_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${server_url}</span>`);
+        
+        gotifyCode.innerHTML = html;
+    }
+    
+    document.getElementById("gt-token").addEventListener("input", updateGotifyJSON);
+    document.getElementById("gt-url").addEventListener("input", updateGotifyJSON);
+
+    // Scoped clear button
+    document.querySelector('#gotify-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("gt-url").value = "";
+        document.getElementById("gt-token").value = "";
+        gotifyCode.innerHTML = gotifyTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= PUSHOVER ================= -->
+<section class="panel" id="pushover-panel">
+    <h1>Pushover</h1>
+    <p class="subtitle">is a service for sending instant notifications to devices and apps.</p>
+    
+    <div class="copy-container">
+        <pre><code id="pushover-code">{
+  "PUSHOVER": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "https://api.pushover.net/1/messages.json"
+    ],
+    "HEADER": [{"Content-type": "application/json"}],
+    "PAYLOAD": [{
+      "token": "<span class="placeholder">{TOKEN}</span>",
+      "user": "<span class="placeholder">{USER_KEY}</span>",
+      "title": "header",
+      "message": "message",
+      "html": 1
+    }],
+    "FORMAT_MESSAGE": ["html"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="pushover" data-target="pushover-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="pushover" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="pushover-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">TOKEN</td><td><input type="text" id="ph-token" placeholder="Paste your App Token (e.g., abc123xyz...)"/></td></tr>
+        <tr><td class="required">USER_KEY</td><td><input type="text" id="ph-user_key" placeholder="Paste your User Key (e.g., abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const pushoverCode = document.getElementById("pushover-code");
+    const pushoverTemplate = pushoverCode.innerHTML;
+    
+    function updatePushoverJSON() {
+        let html = pushoverTemplate;
+        const token = document.getElementById("ph-token").value.trim();
+        const user_key = document.getElementById("ph-user_key").value.trim();
+    
+        if (token) html = html.replace('<span class="placeholder">{TOKEN}</span>', `<span style="color: var(--primary); font-weight: 600;">${token}</span>`);
+        if (user_key) html = html.replace('<span class="placeholder">{USER_KEY}</span>', `<span style="color: var(--primary); font-weight: 600;">${user_key}</span>`);
+        
+        pushoverCode.innerHTML = html;
+    }
+    
+    document.getElementById("ph-token").addEventListener("input", updatePushoverJSON);
+    document.getElementById("ph-user_key").addEventListener("input", updatePushoverJSON);
+
+    // Scoped clear button
+    document.querySelector('#pushover-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("ph-token").value = "";
+        document.getElementById("ph-user_key").value = "";
+        pushoverCode.innerHTML = pushoverTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= PUSHBULLET ================= -->
+<section class="panel" id="pushbullet-panel">
+    <h1>Pushbullet</h1>
+    <p class="subtitle">is a service to send notifications, links, and files between devices.</p>
+    
+    <div class="copy-container">
+        <pre><code id="pushbullet-code">{
+  "PUSHBULLET": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "https://api.pushbullet.com/v2/pushes"
+    ],
+    "HEADER": [{
+      "Content-Type": "application/json",
+      "Access-Token": "<span class="placeholder">{TOKEN}</span>"
+    }],
+    "PAYLOAD": [{
+      "type": "note",
+      "title": "header",
+      "body": "message"
+    }],
+    "FORMAT_MESSAGE": ["text"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="pushbullet" data-target="pushbullet-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="pushbullet" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="pushbullet-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">TOKEN</td><td><input type="text" id="pb-token" placeholder="Paste your Webhook Token (e.g., abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const pushbulletCode = document.getElementById("pushbullet-code");
+    const pushbulletTemplate = pushbulletCode.innerHTML;
+    
+    function updatePushbulletJSON() {
+        let html = pushbulletTemplate;
+        const token = document.getElementById("pb-token").value.trim();
+    
+        if (token) html = html.replace('<span class="placeholder">{TOKEN}</span>', `<span style="color: var(--primary); font-weight: 600;">${token}</span>`);
+        
+        pushbulletCode.innerHTML = html;
+    }
+    
+    document.getElementById("pb-token").addEventListener("input", updatePushbulletJSON);
+
+    // Scoped clear button
+    document.querySelector('#pushbullet-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("pb-token").value = "";
+        pushbulletCode.innerHTML = pushbulletTemplate;
+    });
+    </script>
+</section>
+
+<!-- ================= WEBNTFY ================= -->
+<section class="panel" id="webntfy-panel">
+    <h1>Webntfy</h1>
+    <p class="subtitle">is lightweight web-based notification service.</p>
+    
+    <div class="copy-container">
+        <pre><code id="webntfy-code">{
+  "WEBNTFY": {
+    "ENABLED": true,
+    "WEBHOOK_URL": [
+      "<span class="placeholder">{SERVER_URL}</span>/messages"
+    ],
+    "HEADER": [{"Content-Type": "application/json"}],
+    "PAYLOAD": [{
+      "message": "message",
+      "channel": "<span class="placeholder">{CHANNEL}</span>"
+    }],
+    "FORMAT_MESSAGE": ["markdown"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="webntfy" data-target="webntfy-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="webntfy" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="webntfy-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SERVER_URL</td><td><input type="text" id="wn-url" placeholder="Paste Server URL starting with https://..."/></td></tr>
+        <tr><td class="required">CHANNEL</td><td><input type="text" id="wn-channel" placeholder="Paste your Channel Name (e.g., #abc123xyz...)"/></td></tr>
+    </table>
+    
+    <script>
+    const webntfyCode = document.getElementById("webntfy-code");
+    const webntfyTemplate = webntfyCode.innerHTML;
+    
+    function updateWebntfyJSON() {
+        let html = webntfyTemplate;
+        const url = document.getElementById("wn-url").value.trim();
+        const channel = document.getElementById("wn-channel").value.trim();
+    
+        if (url) html = html.replace('<span class="placeholder">{SERVER_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+        if (channel) html = html.replace('<span class="placeholder">{CHANNEL}</span>', `<span style="color: var(--primary); font-weight: 600;">${channel}</span>`);
+        
+        webntfyCode.innerHTML = html;
+    }
+    
+    document.getElementById("wn-url").addEventListener("input", updateWebntfyJSON);
+    document.getElementById("wn-channel").addEventListener("input", updateWebntfyJSON);
+
+    // Scoped clear button
+    document.querySelector('#webntfy-panel .clear-icon').addEventListener("click", () => {
+        document.getElementById("wn-url").value = "";
+        document.getElementById("wn-channel").value = "";
+        webntfyCode.innerHTML = webntfyTemplate;
+    });
+    </script>
+</section>
+
+<footer class="copyright">
+    <span>MPN JSON Creator © 2boom, 2025</span>
+</footer>
+
+<!-- JavaScript Functionality -->
+<script>
+// ==============================
+// NOTIFICATION SYSTEM
+// ==============================
+
+function showNotification(message, type = 'info') {
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 6px;
+        color: white;
+        font-size: 0.9rem;
+        z-index: 1000;
+        max-width: 400px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
+
+// ==============================
+// CLIPBOARD FUNCTIONS
+// ==============================
+
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        return successful;
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+        return false;
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
+
+function copyToClipboard(text) {
+    if (!navigator.clipboard) {
+        return Promise.resolve(fallbackCopyTextToClipboard(text));
+    }
+    return navigator.clipboard.writeText(text).then(() => true).catch((err) => {
+        console.error('Async: Could not copy text: ', err);
+        return fallbackCopyTextToClipboard(text);
+    });
+}
+
+function cleanJSONText(text) {
+    let cleaned = text
+        .replace(/<span[^>]*>/g, '')
+        .replace(/<\/span>/g, '')
+        .trim();
+    
+    cleaned = cleaned.replace(/",\n\s+"/g, '", "');
+    cleaned = cleaned.replace(/",\n\s+\}/g, '"}');
+    cleaned = cleaned.replace(/",\n\s+\]/g, '"]');
+    
+    return cleaned;
+}
+
+// ==============================
+// EVENT LISTENERS
+// ==============================
+
+// Download functionality
+document.addEventListener("click", function (e) {
+    const downloadBtn = e.target.closest(".download-icon");
+    if (!downloadBtn) return;
+
+    const container = downloadBtn.closest(".copy-container");
+    const codeBlock = container.querySelector("pre code");
+    const serviceName = downloadBtn.getAttribute('data-service') || 'config';
+    
+    if (!codeBlock) return;
+
+    const rawText = codeBlock.textContent || codeBlock.innerText;
+    const jsonText = cleanJSONText(rawText);
+    
+    const filename = `${serviceName}_config.json`;
+    
+    const blob = new Blob([jsonText], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    downloadBtn.classList.add("downloaded");
+    const originalHTML = downloadBtn.innerHTML;
+    downloadBtn.innerHTML = '<img src="{{ url_for("static", filename="check_icon.svg") }}" class="icon-svg" alt="Downloaded">';
+    
+    showNotification(`${filename} downloaded!`, 'success');
+    
+    setTimeout(() => {
+        downloadBtn.innerHTML = originalHTML;
+        downloadBtn.classList.remove("downloaded");
+    }, 2000);
+});
+
+// Copy functionality
+document.addEventListener("click", function (e) {
+    const copyBtn = e.target.closest(".copy-icon");
+    if (!copyBtn) return;
+
+    const targetId = copyBtn.getAttribute('data-target');
+    if (!targetId) return;
+    
+    const codeBlock = document.getElementById(targetId);
+    if (!codeBlock) return;
+
+    const rawText = codeBlock.textContent || codeBlock.innerText;
+    const jsonText = cleanJSONText(rawText);
+    
+    copyToClipboard(jsonText).then(success => {
+        if (success) {
+            copyBtn.classList.add("copied");
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<img src="{{ url_for("static", filename="check_icon.svg") }}" class="icon-svg" alt="Copied">';
+            
+            showNotification('JSON copied to clipboard!', 'success');
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalHTML;
+                copyBtn.classList.remove("copied");
+            }, 2000);
+        } else {
+            showNotification('Failed to copy to clipboard', 'error');
+        }
+    });
+});
+
+// Test functionality
+document.addEventListener("click", function (e) {
+    const testBtn = e.target.closest(".test-icon");
+    if (!testBtn) return;
+
+    const targetId = testBtn.getAttribute('data-target');
+    if (!targetId) return;
+    
+    const codeBlock = document.getElementById(targetId);
+    if (!codeBlock) return;
+
+    const rawText = codeBlock.textContent || codeBlock.innerText;
+    const jsonText = cleanJSONText(rawText);
+    const serviceName = testBtn.getAttribute('data-service') || 'unknown';
+    
+    testBtn.classList.add("testing");
+    const originalHTML = testBtn.innerHTML;
+    testBtn.innerHTML = '<img src="{{ url_for("static", filename="loading_icon.svg") }}" class="icon-svg" alt="Testing">';
+    
+    fetch('/test-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service: serviceName, config: jsonText })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            testBtn.innerHTML = '<img src="{{ url_for("static", filename="check_icon.svg") }}" class="icon-svg" alt="Success">';
+        } else {
+            testBtn.innerHTML = '<img src="{{ url_for("static", filename="error_icon.svg") }}" class="icon-svg" alt="Error">';
+        }
+        
+        showNotification(data.message, data.success ? 'success' : 'error');
+        
+        setTimeout(() => {
+            testBtn.innerHTML = originalHTML;
+            testBtn.classList.remove("testing");
+        }, 2000);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        testBtn.innerHTML = '<img src="{{ url_for("static", filename="error_icon.svg") }}" class="icon-svg" alt="Error">';
+        showNotification(`Test failed: ${error.message}`, 'error');
+        
+        setTimeout(() => {
+            testBtn.innerHTML = originalHTML;
+            testBtn.classList.remove("testing");
+        }, 2000);
+    });
+});
+document.addEventListener("click", function (e) {
+    const clearBtn = e.target.closest(".clear-icon");
+    if (!clearBtn) return;
+
+    // Visual feedback on the button itself
+    clearBtn.classList.add("cleared");
+    const originalHTML = clearBtn.innerHTML;
+    clearBtn.innerHTML = '<img src="{{ url_for("static", filename="check_icon.svg") }}" class="icon-svg" alt="Cleared">';
+
+    // Find the service name for a nicer message
+    const panel = clearBtn.closest(".panel");
+    const serviceName = panel.querySelector("h1")?.textContent.trim() || "Form";
+
+    showNotification(`${serviceName} form cleared!`, 'success');
+
+    // Restore original icon after 2 seconds
+    setTimeout(() => {
+        clearBtn.innerHTML = originalHTML;
+        clearBtn.classList.remove("cleared");
+    }, 2000);
+});
+</script>
+
+</body>
+</html>
