@@ -126,7 +126,7 @@ table input {
     border-radius: 4px;
 }
 
-/* --- Base Icon Button Styles (Merged) --- */
+/* --- Base Icon Button Styles --- */
 .copy-icon,
 .download-icon,
 .test-icon,
@@ -172,7 +172,7 @@ table input {
         
     }
 }
-/* --- SVG Image Styles (Merged) --- */
+/* --- SVG Image Styles --- */
 .copy-icon img.icon-svg,
 .download-icon img.icon-svg,
 .test-icon img.icon-svg, 
@@ -183,7 +183,7 @@ table input {
     transition: all 0.2s ease-out;
 }
 
-/* --- Hover/Active/Copied/Downloaded States (Merged) --- */
+/* --- Hover/Active/Copied/Downloaded States --- */
 .copy-icon:hover img.icon-svg,
 .copy-icon.copied img.icon-svg,
 .download-icon:hover img.icon-svg,
@@ -204,7 +204,7 @@ table input {
     100% { transform: rotate(360deg); }
 }
 
-/* Dark Theme Icon Filters (Merged) */
+/* Dark Theme Icon Filters */
 @media (prefers-color-scheme: dark) {
     .copy-icon img.icon-svg,
     .download-icon img.icon-svg,
@@ -214,7 +214,7 @@ table input {
     }
 }
 
-/* Light Theme Icon Filters (Merged) */
+/* Light Theme Icon Filters */
 @media (prefers-color-scheme: light) {
     .copy-icon img.icon-svg,
     .download-icon img.icon-svg,
