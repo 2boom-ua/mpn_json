@@ -7,7 +7,7 @@
 
 
 <div align="center">  
-    <img src="https://github.com/2boom-ua/mpn_json/blob/main/screenshot.png?raw=true" alt="" width="779" height="555">
+    <img src="https://github.com/2boom-ua/mpn_json/blob/main/screenshot.png?raw=true" alt="" width="545" height="388">
 </div>
 
 
