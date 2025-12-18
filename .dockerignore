@@ -7,5 +7,6 @@ venv/
 .git
 .gitignore
 *.log
+screenshot.png
 Dockerfile
 README.md
