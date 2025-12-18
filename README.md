@@ -50,7 +50,7 @@ This tool provides an interactive interface to configure notifications for over 
 
 ---
 
-## 🛠 Installation & Running
+## Installation & Running
 
 The application is distributed as a Docker image for easy deployment.
 
@@ -127,7 +127,11 @@ WantedBy=multi-user.target
 
 ```
 systemctl daemon-reload
+```
+```
 systemctl enable mpn_json.service
+```
+```
 systemctl restart mpn_json.service
 ```
 
