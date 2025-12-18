@@ -82,7 +82,6 @@
     document.getElementById("tg-token").addEventListener("input", updateTelegramJSON);
     document.getElementById("tg-chat").addEventListener("input", updateTelegramJSON);
 
-    // Scoped clear button
     document.querySelector('#telegram-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("tg-token").value = "";
         document.getElementById("tg-chat").value = "";
@@ -149,7 +148,6 @@
     
     document.getElementById("ds-url").addEventListener("input", updateDiscordJSON);
 
-    // Scoped clear button
     document.querySelector('#discord-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("ds-url").value = "";
         discordCode.innerHTML = discordTemplate;
@@ -224,7 +222,6 @@
     document.getElementById("mx-url").addEventListener("input", updateMatrixJSON);
     document.getElementById("mx-room").addEventListener("input", updateMatrixJSON);
 
-    // Scoped clear button
     document.querySelector('#matrix-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("mx-token").value = "";
         document.getElementById("mx-url").value = "";
@@ -296,7 +293,6 @@
     document.getElementById("ap-conf").addEventListener("input", updateAppriseJSON);
     document.getElementById("ap-url").addEventListener("input", updateAppriseJSON);
 
-    // Scoped clear button
     document.querySelector('#apprise-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("ap-url").value = "";
         document.getElementById("ap-conf").value = "";
@@ -359,11 +355,10 @@
         
         ntfyCode.innerHTML = html;
     }
-    
+   
     document.getElementById("nt-sub").addEventListener("input", updateNtfyJSON);
     document.getElementById("nt-url").addEventListener("input", updateNtfyJSON);
 
-    // Scoped clear button
     document.querySelector('#ntfy-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("nt-url").value = "";
         document.getElementById("nt-sub").value = "";
@@ -426,7 +421,6 @@
     
     document.getElementById("pm-url").addEventListener("input", updatePumbleJSON);
 
-    // Scoped clear button
     document.querySelector('#pumble-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("pm-url").value = "";
         pumbleCode.innerHTML = pumbleTemplate;
@@ -488,7 +482,6 @@
     
     document.getElementById("mt-url").addEventListener("input", updateMattermostJSON);
 
-    // Scoped clear button
     document.querySelector('#mattermost-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("mt-url").value = "";
         mattermostCode.innerHTML = mattermostTemplate;
@@ -554,7 +547,6 @@
     document.getElementById("zp-sub").addEventListener("input", updateZulipJSON);
     document.getElementById("zp-api").addEventListener("input", updateZulipJSON);
 
-    // Scoped clear button
     document.querySelector('#zulip-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("zp-sub").value = "";
         document.getElementById("zp-api").value = "";
@@ -617,7 +609,6 @@
     
     document.getElementById("fl-token").addEventListener("input", updateFlockJSON);
 
-    // Scoped clear button
     document.querySelector('#flock-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("fl-token").value = "";
         flockCode.innerHTML = flockTemplate;
@@ -682,7 +673,6 @@
     
     document.getElementById("sl-url").addEventListener("input", updateSlackJSON);
 
-    // Scoped clear button
     document.querySelector('#slack-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("sl-url").value = "";
         slackCode.innerHTML = slackTemplate;
@@ -744,7 +734,6 @@
     
     document.getElementById("rc-url").addEventListener("input", updateRocketJSON);
 
-    // Scoped clear button
     document.querySelector('#rocket-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("rc-url").value = "";
         rocketCode.innerHTML = rocketTemplate;
@@ -814,7 +803,6 @@
     document.getElementById("gt-token").addEventListener("input", updateGotifyJSON);
     document.getElementById("gt-url").addEventListener("input", updateGotifyJSON);
 
-    // Scoped clear button
     document.querySelector('#gotify-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("gt-url").value = "";
         document.getElementById("gt-token").value = "";
@@ -887,7 +875,6 @@
     document.getElementById("ph-token").addEventListener("input", updatePushoverJSON);
     document.getElementById("ph-user_key").addEventListener("input", updatePushoverJSON);
 
-    // Scoped clear button
     document.querySelector('#pushover-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("ph-token").value = "";
         document.getElementById("ph-user_key").value = "";
@@ -957,7 +944,6 @@
     
     document.getElementById("pb-token").addEventListener("input", updatePushbulletJSON);
 
-    // Scoped clear button
     document.querySelector('#pushbullet-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("pb-token").value = "";
         pushbulletCode.innerHTML = pushbulletTemplate;
@@ -1026,7 +1012,6 @@
     document.getElementById("wn-url").addEventListener("input", updateWebntfyJSON);
     document.getElementById("wn-channel").addEventListener("input", updateWebntfyJSON);
 
-    // Scoped clear button
     document.querySelector('#webntfy-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("wn-url").value = "";
         document.getElementById("wn-channel").value = "";
@@ -1169,7 +1154,9 @@ document.addEventListener("click", function (e) {
     }, 2000);
 });
 
-// Copy functionality
+// ==============================
+// COPY FUNCTIONALITY
+// ==============================
 document.addEventListener("click", function (e) {
     const copyBtn = e.target.closest(".copy-icon");
     if (!copyBtn) return;
@@ -1201,7 +1188,9 @@ document.addEventListener("click", function (e) {
     });
 });
 
-// Test functionality
+// ==============================
+// TEST FUNCTIONALITY
+// ==============================
 document.addEventListener("click", function (e) {
     const testBtn = e.target.closest(".test-icon");
     if (!testBtn) return;
@@ -1258,18 +1247,15 @@ document.addEventListener("click", function (e) {
     const clearBtn = e.target.closest(".clear-icon");
     if (!clearBtn) return;
 
-    // Visual feedback on the button itself
     clearBtn.classList.add("cleared");
     const originalHTML = clearBtn.innerHTML;
     clearBtn.innerHTML = '<img src="{{ url_for("static", filename="check_icon.svg") }}" class="icon-svg" alt="Cleared">';
 
-    // Find the service name for a nicer message
     const panel = clearBtn.closest(".panel");
     const serviceName = panel.querySelector("h1")?.textContent.trim() || "Form";
 
     showNotification(`${serviceName} form cleared!`, 'success');
 
-    // Restore original icon after 2 seconds
     setTimeout(() => {
         clearBtn.innerHTML = originalHTML;
         clearBtn.classList.remove("cleared");
