@@ -92,8 +92,8 @@ You can set this app to run as a Linux service for continuous monitoring.
 ### Clone the repository:
 
 ```
-git clone https://github.com/2boom-ua/dockcheck.git
-cd dockcheck
+git clone https://github.com/2boom-ua/mnp_json.git
+cd mnp_json
 ```
 
 
