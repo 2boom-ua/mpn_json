@@ -16,6 +16,9 @@ A user-friendly web application for generating and testing notification configur
 This tool provides an interactive interface to configure notifications for over a dozen popular platforms, with real-time JSON preview and one-click testing.
 
 ---
+[Configuration examples for Telegram, Discord, Matrix, Apprise, Pumble, Mattermost, Discord, Ntfy, Gotify, Zulip, Flock, Slack, Rocket.Chat, Pushover, Pushbullet, Webntfy](docs/json_message_config.md)
+
+---
 
 ## Features
 
