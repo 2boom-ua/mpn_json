@@ -11,6 +11,28 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}" />
 </head>
 <body>
+<!-- ================= SCROLL NAVIGATION ================= -->
+
+<nav class="scroll-nav">
+    <ul>
+        <li><a href="#telegram-panel" class="nav-link">Telegram</a></li>
+        <li><a href="#discord-panel" class="nav-link">Discord</a></li>
+        <li><a href="#matrix-panel" class="nav-link">Matrix</a></li>
+        <li><a href="#apprise-panel" class="nav-link">Apprise</a></li>
+        <li><a href="#ntfy-panel" class="nav-link">Ntfy</a></li>
+        <li><a href="#pumble-panel" class="nav-link">Pumble</a></li>
+        <li><a href="#mattermost-panel" class="nav-link">Mattermost</a></li>
+        <li><a href="#zulip-panel" class="nav-link">Zulip</a></li>
+        <li><a href="#flock-panel" class="nav-link">Flock</a></li>
+        <li><a href="#slack-panel" class="nav-link">Slack</a></li>
+        <li><a href="#rocket-panel" class="nav-link">Rocket.Chat</a></li>
+        <li><a href="#gotify-panel" class="nav-link">Gotify</a></li>
+        <li><a href="#pushover-panel" class="nav-link">Pushover</a></li>
+        <li><a href="#pushbullet-panel" class="nav-link">Pushbullet</a></li>
+        <li><a href="#webntfy-panel" class="nav-link">Webntfy</a></li>
+        <li><a href="#custom-panel" class="nav-link">Custom</a></li>
+    </ul>
+</nav>
 
 <!-- ================= TELEGRAM ================= -->
 <section class="panel" id="telegram-panel">
@@ -87,6 +109,42 @@
         document.getElementById("tg-chat").value = "";
         telegramCode.innerHTML = telegramTemplate;
     });
+
+    // Add validation to copy button
+    document.querySelector('#telegram-panel .copy-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("tg-token").value.trim();
+        const chat = document.getElementById("tg-chat").value.trim();
+        
+        if (!token || !chat) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Telegram', 'error');
+            return false;
+        }
+    });
+    
+    // Add validation to download button
+    document.querySelector('#telegram-panel .download-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("tg-token").value.trim();
+        const chat = document.getElementById("tg-chat").value.trim();
+        
+        if (!token || !chat) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Telegram', 'error');
+            return false;
+        }
+    });
+    
+    // Add validation to test button
+    document.querySelector('#telegram-panel .test-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("tg-token").value.trim();
+        const chat = document.getElementById("tg-chat").value.trim();
+        
+        if (!token || !chat) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Telegram', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -151,6 +209,37 @@
     document.querySelector('#discord-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("ds-url").value = "";
         discordCode.innerHTML = discordTemplate;
+    });
+    
+    // Add validation to buttons
+    document.querySelector('#discord-panel .copy-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("ds-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Discord', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#discord-panel .download-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("ds-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Discord', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#discord-panel .test-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("ds-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Discord', 'error');
+            return false;
+        }
     });
     </script>
 </section>
@@ -228,6 +317,43 @@
         document.getElementById("mx-room").value = "";
         matrixCode.innerHTML = matrixTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#matrix-panel .copy-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("mx-token").value.trim();
+        const server_url = document.getElementById("mx-url").value.trim();
+        const room_id = document.getElementById("mx-room").value.trim();
+        
+        if (!token || !server_url || !room_id) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Matrix', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#matrix-panel .download-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("mx-token").value.trim();
+        const server_url = document.getElementById("mx-url").value.trim();
+        const room_id = document.getElementById("mx-room").value.trim();
+        
+        if (!token || !server_url || !room_id) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Matrix', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#matrix-panel .test-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("mx-token").value.trim();
+        const server_url = document.getElementById("mx-url").value.trim();
+        const room_id = document.getElementById("mx-room").value.trim();
+        
+        if (!token || !server_url || !room_id) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Matrix', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -298,6 +424,40 @@
         document.getElementById("ap-conf").value = "";
         appriseCode.innerHTML = appriseTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#apprise-panel .copy-icon').addEventListener("click", (e) => {
+        const conf = document.getElementById("ap-conf").value.trim();
+        const url = document.getElementById("ap-url").value.trim();
+        
+        if (!conf || !url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Apprise', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#apprise-panel .download-icon').addEventListener("click", (e) => {
+        const conf = document.getElementById("ap-conf").value.trim();
+        const url = document.getElementById("ap-url").value.trim();
+        
+        if (!conf || !url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Apprise', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#apprise-panel .test-icon').addEventListener("click", (e) => {
+        const conf = document.getElementById("ap-conf").value.trim();
+        const url = document.getElementById("ap-url").value.trim();
+        
+        if (!conf || !url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Apprise', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -364,6 +524,40 @@
         document.getElementById("nt-sub").value = "";
         ntfyCode.innerHTML = ntfyTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#ntfy-panel .copy-icon').addEventListener("click", (e) => {
+        const sub = document.getElementById("nt-sub").value.trim();
+        const url = document.getElementById("nt-url").value.trim();
+        
+        if (!sub || !url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Ntfy', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#ntfy-panel .download-icon').addEventListener("click", (e) => {
+        const sub = document.getElementById("nt-sub").value.trim();
+        const url = document.getElementById("nt-url").value.trim();
+        
+        if (!sub || !url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Ntfy', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#ntfy-panel .test-icon').addEventListener("click", (e) => {
+        const sub = document.getElementById("nt-sub").value.trim();
+        const url = document.getElementById("nt-url").value.trim();
+        
+        if (!sub || !url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Ntfy', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -425,6 +619,37 @@
         document.getElementById("pm-url").value = "";
         pumbleCode.innerHTML = pumbleTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#pumble-panel .copy-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("pm-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Pumble', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#pumble-panel .download-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("pm-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Pumble', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#pumble-panel .test-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("pm-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Pumble', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -485,6 +710,37 @@
     document.querySelector('#mattermost-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("mt-url").value = "";
         mattermostCode.innerHTML = mattermostTemplate;
+    });
+    
+    // Add validation to buttons
+    document.querySelector('#mattermost-panel .copy-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("mt-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Mattermost', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#mattermost-panel .download-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("mt-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Mattermost', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#mattermost-panel .test-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("mt-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Mattermost', 'error');
+            return false;
+        }
     });
     </script>
 </section>
@@ -552,6 +808,40 @@
         document.getElementById("zp-api").value = "";
         zulipCode.innerHTML = zulipTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#zulip-panel .copy-icon').addEventListener("click", (e) => {
+        const subdomain = document.getElementById("zp-sub").value.trim();
+        const api_key = document.getElementById("zp-api").value.trim();
+        
+        if (!subdomain || !api_key) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Zulip', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#zulip-panel .download-icon').addEventListener("click", (e) => {
+        const subdomain = document.getElementById("zp-sub").value.trim();
+        const api_key = document.getElementById("zp-api").value.trim();
+        
+        if (!subdomain || !api_key) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Zulip', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#zulip-panel .test-icon').addEventListener("click", (e) => {
+        const subdomain = document.getElementById("zp-sub").value.trim();
+        const api_key = document.getElementById("zp-api").value.trim();
+        
+        if (!subdomain || !api_key) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Zulip', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -612,6 +902,37 @@
     document.querySelector('#flock-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("fl-token").value = "";
         flockCode.innerHTML = flockTemplate;
+    });
+    
+    // Add validation to buttons
+    document.querySelector('#flock-panel .copy-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("fl-token").value.trim();
+        
+        if (!token) {
+            e.stopPropagation();
+            showNotification('Please fill TOKEN for Flock', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#flock-panel .download-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("fl-token").value.trim();
+        
+        if (!token) {
+            e.stopPropagation();
+            showNotification('Please fill TOKEN for Flock', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#flock-panel .test-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("fl-token").value.trim();
+        
+        if (!token) {
+            e.stopPropagation();
+            showNotification('Please fill TOKEN for Flock', 'error');
+            return false;
+        }
     });
     </script>
 </section>
@@ -677,6 +998,37 @@
         document.getElementById("sl-url").value = "";
         slackCode.innerHTML = slackTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#slack-panel .copy-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("sl-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Slack', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#slack-panel .download-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("sl-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Slack', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#slack-panel .test-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("sl-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Slack', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -737,6 +1089,37 @@
     document.querySelector('#rocket-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("rc-url").value = "";
         rocketCode.innerHTML = rocketTemplate;
+    });
+    
+    // Add validation to buttons
+    document.querySelector('#rocket-panel .copy-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("rc-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Rocket.Chat', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#rocket-panel .download-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("rc-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Rocket.Chat', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#rocket-panel .test-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("rc-url").value.trim();
+        
+        if (!url) {
+            e.stopPropagation();
+            showNotification('Please fill WEBHOOK_URL for Rocket.Chat', 'error');
+            return false;
+        }
     });
     </script>
 </section>
@@ -807,6 +1190,40 @@
         document.getElementById("gt-url").value = "";
         document.getElementById("gt-token").value = "";
         gotifyCode.innerHTML = gotifyTemplate;
+    });
+    
+    // Add validation to buttons
+    document.querySelector('#gotify-panel .copy-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("gt-token").value.trim();
+        const server_url = document.getElementById("gt-url").value.trim();
+        
+        if (!token || !server_url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Gotify', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#gotify-panel .download-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("gt-token").value.trim();
+        const server_url = document.getElementById("gt-url").value.trim();
+        
+        if (!token || !server_url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Gotify', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#gotify-panel .test-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("gt-token").value.trim();
+        const server_url = document.getElementById("gt-url").value.trim();
+        
+        if (!token || !server_url) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Gotify', 'error');
+            return false;
+        }
     });
     </script>
 </section>
@@ -880,6 +1297,40 @@
         document.getElementById("ph-user_key").value = "";
         pushoverCode.innerHTML = pushoverTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#pushover-panel .copy-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("ph-token").value.trim();
+        const user_key = document.getElementById("ph-user_key").value.trim();
+        
+        if (!token || !user_key) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Pushover', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#pushover-panel .download-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("ph-token").value.trim();
+        const user_key = document.getElementById("ph-user_key").value.trim();
+        
+        if (!token || !user_key) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Pushover', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#pushover-panel .test-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("ph-token").value.trim();
+        const user_key = document.getElementById("ph-user_key").value.trim();
+        
+        if (!token || !user_key) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Pushover', 'error');
+            return false;
+        }
+    });
     </script>
 </section>
 
@@ -947,6 +1398,37 @@
     document.querySelector('#pushbullet-panel .clear-icon').addEventListener("click", () => {
         document.getElementById("pb-token").value = "";
         pushbulletCode.innerHTML = pushbulletTemplate;
+    });
+    
+    // Add validation to buttons
+    document.querySelector('#pushbullet-panel .copy-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("pb-token").value.trim();
+        
+        if (!token) {
+            e.stopPropagation();
+            showNotification('Please fill TOKEN for Pushbullet', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#pushbullet-panel .download-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("pb-token").value.trim();
+        
+        if (!token) {
+            e.stopPropagation();
+            showNotification('Please fill TOKEN for Pushbullet', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#pushbullet-panel .test-icon').addEventListener("click", (e) => {
+        const token = document.getElementById("pb-token").value.trim();
+        
+        if (!token) {
+            e.stopPropagation();
+            showNotification('Please fill TOKEN for Pushbullet', 'error');
+            return false;
+        }
     });
     </script>
 </section>
@@ -1017,7 +1499,198 @@
         document.getElementById("wn-channel").value = "";
         webntfyCode.innerHTML = webntfyTemplate;
     });
+    
+    // Add validation to buttons
+    document.querySelector('#webntfy-panel .copy-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("wn-url").value.trim();
+        const channel = document.getElementById("wn-channel").value.trim();
+        
+        if (!url || !channel) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Webntfy', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#webntfy-panel .download-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("wn-url").value.trim();
+        const channel = document.getElementById("wn-channel").value.trim();
+        
+        if (!url || !channel) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Webntfy', 'error');
+            return false;
+        }
+    });
+    
+    document.querySelector('#webntfy-panel .test-icon').addEventListener("click", (e) => {
+        const url = document.getElementById("wn-url").value.trim();
+        const channel = document.getElementById("wn-channel").value.trim();
+        
+        if (!url || !channel) {
+            e.stopPropagation();
+            showNotification('Please fill all required fields for Webntfy', 'error');
+            return false;
+        }
+    });
     </script>
+</section>
+
+<!-- ================= CUSTOM ================= -->
+<section class="panel" id="custom-panel">
+    <h1>Custom</h1>
+    <p class="subtitle">form for custom notification service.</p>
+    
+    <div class="copy-container">
+        <pre><code id="custom-code">{
+  "CUSTOM": {
+    "ENABLED": true,
+    "WEBHOOK_URL": ["<span class="placeholder">{SERVER_URL}</span>"],
+    "HEADER": [<span class="placeholder">{HEADER_DATA}</span>],
+    "PAYLOAD": [<span class="placeholder">{PAYLOAD_DATA}</span>],
+    "FORMAT_MESSAGE": ["<span class="placeholder">{FORMAT_MESSAGE}</span>"]
+  }
+}</code></pre>
+
+    <div class="copy-buttons">
+        <button class="test-icon" data-service="custom" data-target="custom-code" data-tooltip="Send test message">
+            <img src="{{ url_for('static', filename='test_icon.svg') }}" class="icon-svg" alt="Test">
+        </button>
+        <button class="clear-icon" data-tooltip="Clear all fields">
+            <img src="{{ url_for('static', filename='clear_icon.svg') }}" class="icon-svg" alt="Clear">
+        </button>
+        <button class="download-icon" data-service="custom" data-tooltip="Download JSON file">
+            <img src="{{ url_for('static', filename='download_icon.svg') }}" class="icon-svg" alt="Download">
+        </button>
+        <button class="copy-icon" data-target="custom-code" data-tooltip="Copy JSON to cliboard">
+            <img src="{{ url_for('static', filename='copy_icon.svg') }}" class="icon-svg" alt="Copy">
+        </button>
+    </div>
+    </div>
+
+    <table>
+        <tr><th>Key Name</th><th>Fill in every one of them.</th></tr>
+        <tr><td class="required">SERVER_URL</td><td><input type="text" id="cu-url" placeholder="Paste Server URL starting with https://..."/></td></tr>
+        <tr><td class="required">HEADER_DATA</td><td><input type="text" id="cu-header" placeholder='Paste header data (e.g., {"Content-Type": "application/json"})'/></td></tr>
+        <tr><td class="required">PAYLOAD_DATA</td><td><input type="text" id="cu-payload" placeholder='Paste payload data (e.g., {"message": "message"})'/></td></tr>
+        <tr><td class="required">FORMAT_MESSAGE</td><td><input type="text" id="cu-format" placeholder='Paste format message (e.g., text or markdown or html or simplified)'/></td></tr>
+    </table>
+    <div class="help-text">
+        <p><strong>SERVER_URL:</strong> The full webhook endpoint that will receive the notification. Must be a valid URL and usually starts with https://...</p>
+        <p><strong>HEADER_DATA:</strong> Optional HTTP headers sent with the request, such as authentication tokens or content type. Use valid JSON <strong>object</strong> (for example: {"Content-Type": "application/json", "Authorization": "Bearer token"}).</p>
+        <p><strong>PAYLOAD_DATA:</strong> The JSON body sent to the webhook. Define the structure required by the service API. The notification message will be injected automatically when the alert is sent. Use valid JSON <strong>object</strong> (for example: {"title": "Watchdigest Alert", "message": "message"}).</p>
+        <p><strong>FORMAT_MESSAGE:</strong> The notification format type for message.(for example: {text or markdown or html or simplified}).</p>
+    </div>
+    <script>
+const customCode = document.getElementById("custom-code");
+const customTemplate = customCode.innerHTML;
+
+function trimQuotes(str) {
+    if (typeof str !== 'string') return str;
+
+    while (str.length > 0 && (str[0] === '"' || str[0] === "'")) {
+        str = str.substring(1);
+    }
+
+    while (str.length > 0 && (str[str.length - 1] === '"' || str[str.length - 1] === "'")) {
+        str = str.substring(0, str.length - 1);
+    }
+    
+    return str;
+}
+
+function updateCustomJSON() {
+    let html = customTemplate;
+    let url = document.getElementById("cu-url").value.trim();
+    let header = document.getElementById("cu-header").value.trim();
+    let payload = document.getElementById("cu-payload").value.trim();
+    let format = document.getElementById("cu-format").value.trim();
+
+    url = trimQuotes(url);
+    format = trimQuotes(format);
+    
+    let errors = [];
+    
+    if (header) {
+        try {
+            JSON.parse(header);
+        } catch (e) {
+            errors.push("Header: invalid JSON format");
+        }
+    }
+    
+    if (payload) {
+        try {
+            JSON.parse(payload);
+        } catch (e) {
+            errors.push("Payload: invalid JSON format");
+        }
+    }
+        
+        if (errors.length) {showNotification(errors.join("<br>"), 'error');
+    }
+
+    if (url) html = html.replace('<span class="placeholder">{SERVER_URL}</span>', `<span style="color: var(--primary); font-weight: 600;">${url}</span>`);
+    if (header) html = html.replace('<span class="placeholder">{HEADER_DATA}</span>', `<span style="color: var(--primary); font-weight: 600;">${header}</span>`);
+    if (payload) html = html.replace('<span class="placeholder">{PAYLOAD_DATA}</span>', `<span style="color: var(--primary); font-weight: 600;">${payload}</span>`);
+    if (format) html = html.replace('<span class="placeholder">{FORMAT_MESSAGE}</span>', `<span style="color: var(--primary); font-weight: 600;">${format}</span>`);
+    
+    customCode.innerHTML = html;
+}
+
+document.getElementById("cu-url").addEventListener("input", updateCustomJSON);
+document.getElementById("cu-header").addEventListener("input", updateCustomJSON);
+document.getElementById("cu-payload").addEventListener("input", updateCustomJSON);
+document.getElementById("cu-format").addEventListener("input", updateCustomJSON);
+
+document.querySelector('#custom-panel .clear-icon').addEventListener("click", () => {
+    document.getElementById("cu-url").value = "";
+    document.getElementById("cu-header").value = "";
+    document.getElementById("cu-payload").value = "";
+    document.getElementById("cu-format").value = "";
+    customCode.innerHTML = customTemplate;
+});
+
+// Add validation to buttons
+document.querySelector('#custom-panel .copy-icon').addEventListener("click", (e) => {
+    const url = document.getElementById("cu-url").value.trim();
+    const header = document.getElementById("cu-header").value.trim();
+    const payload = document.getElementById("cu-payload").value.trim();
+    const format = document.getElementById("cu-format").value.trim();
+    
+    if (!url || !header || !payload || !format) {
+        e.stopPropagation();
+        showNotification('Please fill all required fields for Custom', 'error');
+        return false;
+    }
+});
+
+document.querySelector('#custom-panel .download-icon').addEventListener("click", (e) => {
+    const url = document.getElementById("cu-url").value.trim();
+    const header = document.getElementById("cu-header").value.trim();
+    const payload = document.getElementById("cu-payload").value.trim();
+    const format = document.getElementById("cu-format").value.trim();
+    
+    if (!url || !header || !payload || !format) {
+        e.stopPropagation();
+        showNotification('Please fill all required fields for Custom', 'error');
+        return false;
+    }
+});
+
+document.querySelector('#custom-panel .test-icon').addEventListener("click", (e) => {
+    const url = document.getElementById("cu-url").value.trim();
+    const header = document.getElementById("cu-header").value.trim();
+    const payload = document.getElementById("cu-payload").value.trim();
+    const format = document.getElementById("cu-format").value.trim();
+    
+    if (!url || !header || !payload || !format) {
+        e.stopPropagation();
+        showNotification('Please fill all required fields for Custom', 'error');
+        return false;
+    }
+});
+</script>
 </section>
 
 <footer class="copyright">
@@ -1027,9 +1700,50 @@
 <!-- JavaScript Functionality -->
 <script>
 // ==============================
+// SCROLL NAVIGATION HIGHLIGHT
+// ==============================
+function updateNavHighlight() {
+    const panels = document.querySelectorAll('.panel');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    let currentPanelId = '';
+
+    panels.forEach(panel => {
+        const rect = panel.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom >= 150) {
+            currentPanelId = panel.id;
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentPanelId}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', updateNavHighlight);
+
+document.addEventListener('DOMContentLoaded', updateNavHighlight);
+
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 10,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+// ==============================
 // NOTIFICATION SYSTEM
 // ==============================
-
 function showNotification(message, type = 'info') {
     document.querySelectorAll('.notification').forEach(n => n.remove());
     
@@ -1066,7 +1780,6 @@ function showNotification(message, type = 'info') {
 // ==============================
 // CLIPBOARD FUNCTIONS
 // ==============================
-
 function fallbackCopyTextToClipboard(text) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
@@ -1099,23 +1812,17 @@ function copyToClipboard(text) {
 }
 
 function cleanJSONText(text) {
-    let cleaned = text
-        .replace(/<span[^>]*>/g, '')
-        .replace(/<\/span>/g, '')
-        .trim();
-    
-    cleaned = cleaned.replace(/",\n\s+"/g, '", "');
-    cleaned = cleaned.replace(/",\n\s+\}/g, '"}');
-    cleaned = cleaned.replace(/",\n\s+\]/g, '"]');
-    
-    return cleaned;
-}
+    if (typeof text !== 'string') return text;
 
+    return text
+        .replace(/<\/?[^>]+(>|$)/g, "")
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
+        .replace(/[\u200B-\u200D\uFEFF]/g, "")
+        .trim();
+}
 // ==============================
 // EVENT LISTENERS
 // ==============================
-
-// Download functionality
 document.addEventListener("click", function (e) {
     const downloadBtn = e.target.closest(".download-icon");
     if (!downloadBtn) return;
@@ -1201,9 +1908,56 @@ document.addEventListener("click", function (e) {
     const codeBlock = document.getElementById(targetId);
     if (!codeBlock) return;
 
-    const rawText = codeBlock.textContent || codeBlock.innerText;
-    const jsonText = cleanJSONText(rawText);
     const serviceName = testBtn.getAttribute('data-service') || 'unknown';
+    
+    let jsonText;
+    if (serviceName === 'custom') {
+        const url = document.getElementById("cu-url").value.trim();
+        const header = document.getElementById("cu-header").value.trim();
+        const payload = document.getElementById("cu-payload").value.trim();
+        const format = document.getElementById("cu-format").value.trim();
+
+        if (!url) {
+            showNotification("SERVER_URL is required for custom service", 'error');
+            return;
+        }
+
+        let headerObj = {};
+        let payloadObj = {};
+
+        if (header) {
+            try {
+                headerObj = JSON.parse(header);
+            } catch (e) {
+                showNotification("Invalid JSON in HEADER_DATA field. Must be valid JSON object like: {\"Content-Type\": \"application/json\"}", 'error');
+                return;
+            }
+        }
+
+        if (payload) {
+            try {
+                payloadObj = JSON.parse(payload);
+            } catch (e) {
+                showNotification("Invalid JSON in PAYLOAD_DATA field. Must be valid JSON object like: {\"message\": \"Your message here\"}", 'error');
+                return;
+            }
+        }
+
+        const customConfig = {
+            CUSTOM: {
+                ENABLED: true,
+                WEBHOOK_URL: [url],
+                HEADER: [headerObj],
+                PAYLOAD: [payloadObj],
+                FORMAT_MESSAGE: format ? [format] : ["text"]
+            }
+        };
+        
+        jsonText = JSON.stringify(customConfig, null, 2);
+    } else {
+        const rawText = codeBlock.textContent || codeBlock.innerText;
+        jsonText = cleanJSONText(rawText);
+    }
     
     testBtn.classList.add("testing");
     const originalHTML = testBtn.innerHTML;
@@ -1243,6 +1997,10 @@ document.addEventListener("click", function (e) {
         }, 2000);
     });
 });
+
+// ==============================
+// CLEAR FUNCTIONALITY
+// ==============================
 document.addEventListener("click", function (e) {
     const clearBtn = e.target.closest(".clear-icon");
     if (!clearBtn) return;
