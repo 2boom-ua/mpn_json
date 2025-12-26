@@ -1,217 +1,285 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory, render_template, Response, make_response
+from flask import (
+    Flask,
+    request,
+    jsonify,
+    render_template,
+    send_from_directory,
+    make_response,
+)
 import json
 import requests
 import re
-import traceback
-
+import logging
+import random
+import time
 
 check_emoji = "\u2705"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.logger.disabled = True
 
-# ------------------------
-# CORS
-# ------------------------
-@app.after_request
-def after_request(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
-    return response
+check_emoji = "\u2705"
+platform_webhook_url = []
+platform_header = []
+platform_payload = []
+platform_format_message = []
 
-# ------------------------
-# Routes
-# ------------------------
+def cors_response(resp):
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    resp.headers["Access-Control-Max-Age"] = "86400"
+    return resp
+
+def clean_json_string(json_str):
+    """Safely clean JSON string from frontend by removing <span> and </span> tags"""
+    if not json_str:
+        return "{}"
+    json_str = json_str.strip()
+    json_str = re.sub(r"</?span[^>]*>", "", json_str)  # Remove both <span> and </span>
+    return json_str
+
+def clean_url(url):
+    """Clean and validate webhook URL"""
+    if not url:
+        return ""
+    url = url.strip().strip('"').strip("'").replace("\\", "")
+    if not url.startswith(("http://", "https://")):
+        return ""
+    return url
+
+def send_message(message: str):
+    """Send HTTP POST requests with retry logic."""
+    def send_request(url, json_data=None, data=None, headers=None):
+        """
+        Send a POST request with retry logic and exponential backoff.
+        
+        Args:
+            url: Target URL
+            json_data: JSON data to send (optional)
+            data: Form data to send (optional)
+            headers: Request headers (optional)
+        
+        Returns:
+            tuple: (success, response_data) where success is boolean and
+                response_data is either the response or error info
+        """
+        max_attempts = 5
+        
+        for attempt in range(max_attempts):
+            try:
+                response = requests.post(
+                    url, 
+                    json=json_data, 
+                    data=data, 
+                    headers=headers, 
+                    timeout=(5, 20)
+                )
+                response.raise_for_status()
+
+                return True
+                    
+            except requests.exceptions.RequestException as e:
+                logger.error(f"error_send_request_failed {attempt + 1}/{max_attempts} - {url}: {e}")
+                
+                if attempt == max_attempts - 1:
+                    logger.error(f"error_send_request_max_attempts {url}")
+                    return False
+                else:
+                    backoff_time = (2 ** attempt) + random.uniform(0, 1)
+                    logger.warning(f"log_retrying {backoff_time:.2f} seconds...")
+                    time.sleep(backoff_time)
+        
+        return False
+
+
+    def to_html_format(message: str) -> str:
+        message = ''.join(f"<b>{part}</b>" if i % 2 else part for i, part in enumerate(message.split('*')))
+        return message.replace("\n", "<br>")
+
+    def to_markdown_format(message: str, markdown_type: str) -> str:
+        formatters = {
+            "html": lambda msg: to_html_format(msg),
+            "markdown": lambda msg: msg.replace("*", "**"),
+            "text": lambda msg: msg.replace("*", ""),
+            "simplified": lambda msg: msg,
+        }
+        formatter = formatters.get(markdown_type)
+        if formatter:
+            return formatter(message)
+        logger.error("error_unknown_format" + f" '{markdown_type}'")
+        return message
+
+    for url, header, payload, format_message in zip(platform_webhook_url, platform_header, platform_payload, platform_format_message):
+        data, ntfy = None, False
+        formatted_message = to_markdown_format(message, format_message)
+        header_json = header if header else None
+
+        if isinstance(payload, dict):
+            for key in list(payload.keys()):
+                if key == "title":
+                    delimiter = "<br>" if format_message == "html" else "\n"
+                    if delimiter in formatted_message:                          # ← FIX added
+                        header, formatted_message = formatted_message.split(delimiter, 1)
+                        payload[key] = header.replace("*", "")
+                elif key == "extras":
+                    formatted_message = formatted_message.replace("\n", "\n\n")
+                    payload["message"] = formatted_message
+                elif key == "data":
+                    ntfy = True
+                payload[key] = formatted_message if key in ["text", "content", "message", "body", "formatted_body", "data"] else payload[key]
+
+        payload_json = None if ntfy else payload
+        data = formatted_message.encode("utf-8") if ntfy else None
+        send_request(url, payload_json, data, header_json)
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/static/<path:filename>")
-def serve_static(filename):
-    return send_from_directory("static", filename)
-
 @app.route("/test-notification", methods=["POST", "OPTIONS"])
 def test_notification():
+    global platform_webhook_url, platform_header, platform_payload, platform_format_message
+    
     if request.method == "OPTIONS":
-        return "", 204
+        return cors_response(make_response("", 204))
 
     try:
         data = request.get_json()
         if not data:
-            return jsonify({"success": False, "message": "No data received"}), 400
-
-        service_name = data.get("service")
-        config_json = data.get("config")
-
-        if not service_name or not config_json:
-            return jsonify({
-                "success": False,
-                "message": "Missing service name or configuration"
-            }), 400
-
-        print(f"\n=== Test request for {service_name} from {request.remote_addr} ===")
-
-        # Parse JSON safely
+            return cors_response(jsonify({"success": False, "message": "Missing request body"}), 400)
+        
+        config = data.get('config')
+        if not config:
+            return cors_response(jsonify({"success": False, "message": "Missing configuration"}), 400)
+        
+        # Parse JSON config
         try:
-            config_json = clean_json_string(config_json)
-            config = json.loads(config_json)
+            config_json = json.loads(config)
         except json.JSONDecodeError as e:
-            return jsonify({
+            logger.error(f"JSON decode error: {e}")
+            return cors_response(jsonify({"success": False, "message": "Invalid JSON format"}), 400)
+        
+        # Initialize platform-specific lists
+        platform_webhook_url = []
+        platform_header = []
+        platform_payload = []
+        platform_format_message = []
+        
+        # Track enabled platforms for response
+        enabled_platforms = []
+        
+        # Process each platform configuration
+        for platform, settings in config_json.items():
+            if not isinstance(settings, dict):
+                logger.warning(f"Invalid settings format for platform {platform}")
+                continue
+                
+            if settings.get("ENABLED", False):
+                enabled_platforms.append(platform)
+                
+                # Store configuration in appropriate lists
+                for key, value in settings.items():
+                    # Skip the ENABLED flag for data storage
+                    if key == "ENABLED":
+                        continue
+                        
+                    # Store based on key type
+                    if key.lower() == "webhook_url":
+                        if isinstance(value, list):
+                            platform_webhook_url.extend(value)
+                        else:
+                            platform_webhook_url.append(value)
+                    elif key.lower() == "header":
+                        if isinstance(value, list):
+                            platform_header.extend(value)
+                        else:
+                            platform_header.append(value)
+                    elif key.lower() == "payload":
+                        if isinstance(value, list):
+                            platform_payload.extend(value)
+                        else:
+                            platform_payload.append(value)
+                    elif key.lower() == "format_message":
+                        if isinstance(value, list):
+                            platform_format_message.extend(value)
+                        else:
+                            platform_format_message.append(value)
+                    
+                    logger.info(f"{platform} - {key}: {value}")
+        
+        # Check if we have valid configurations
+        if not enabled_platforms:
+            return cors_response(jsonify({
+                "success": False, 
+                "message": "No enabled platforms found in configuration"
+            }), 400)
+        
+        # Verify all required lists have data
+        required_data = all([
+            platform_webhook_url,
+            platform_header,
+            platform_payload,
+            platform_format_message
+        ])
+        
+        if not required_data:
+            missing = []
+            if not platform_webhook_url: missing.append("webhook_url")
+            if not platform_header: missing.append("header")
+            if not platform_payload: missing.append("payload")
+            if not platform_format_message: missing.append("format_message")
+            
+            logger.error(f"Missing configuration: {', '.join(missing)}")
+            return cors_response(jsonify({
                 "success": False,
-                "message": f"Invalid JSON: {str(e)}"
-            }), 400
-
-        # Find service key
-        service_key = service_name.upper()
-        found_key = next(
-            (k for k in config if k.upper() == service_key or service_name.lower() in k.lower()),
-            None
-        )
-
-        if not found_key:
-            return jsonify({
-                "success": False,
-                "message": f"Service '{service_name}' not found. Available: {list(config.keys())}"
-            }), 400
-
-        service_config = config[found_key]
-
-        if not service_config.get("ENABLED", True):
-            return jsonify({
-                "success": False,
-                "message": f"Service {found_key} is disabled"
-            })
-
-        webhook_urls = service_config.get("WEBHOOK_URL", [])
-        if not webhook_urls:
-            return jsonify({
-                "success": False,
-                "message": "No webhook URL found"
-            }), 400
-
-        webhook_url = clean_url(webhook_urls[0])
-
-        payload = (service_config.get("PAYLOAD") or [{}])[0].copy()
-        headers = (service_config.get("HEADER") or [{}])[0]
-
-        test_message = f"{check_emoji} Test notification from MPN JSON Creator"
-        test_payload = prepare_test_payload(found_key, payload, test_message)
-
-        ssl_verify = service_config.get("SSL_VERIFY", True)
-
-        response = requests.post(
-            webhook_url,
-            json=test_payload,
-            headers=headers,
-            timeout=15,
-            verify=ssl_verify
-        )
-
-        if response.status_code in (200, 201, 202, 204):
-            return jsonify({
-                "success": True,
-                "message": f"Test notification sent to {found_key}",
-                "status_code": response.status_code
-            })
-
-        return jsonify({
-            "success": False,
-            "message": f"Failed with status {response.status_code}",
-            "response": response.text[:300],
-            "status_code": response.status_code
-        })
-
-    except requests.exceptions.Timeout:
-        return jsonify({"success": False, "message": "Request timeout (15s)"})
-    except requests.exceptions.SSLError:
-        return jsonify({"success": False, "message": "SSL certificate error"})
-    except requests.exceptions.ConnectionError:
-        return jsonify({"success": False, "message": "Connection error"})
+                "message": f"Missing required configuration: {', '.join(missing)}"
+            }), 400)
+        
+        # Send test notification
+        logger.info("Configuration OK! Sending test notification...")
+        test_message = f"{check_emoji} Test notification from *MPN JSON Creator*"
+        
+        # Store configuration temporarily (consider using app.config or session instead of globals)
+        app.config['TEST_NOTIFICATION_CONFIG'] = {
+            'webhook_url': platform_webhook_url,
+            'header': platform_header,
+            'payload': platform_payload,
+            'format_message': platform_format_message
+        }
+        
+        # Call your send_message function
+        #send_result = send_message(test_message)
+        success = send_message(test_message)
+        
+        if not success:
+            return jsonify({"status": "error"}), 500
+        
+        platform_list = ", ".join(enabled_platforms)
+        return cors_response(jsonify({
+            "success": True,
+            "message": f"Test notification sent to {platform_list}",
+            "platforms": enabled_platforms,
+            "status_code": 200
+        }))
+        
     except Exception as e:
-        print(traceback.format_exc())
-        return jsonify({
+        logger.error(f"Unexpected error in test_notification: {str(e)}", exc_info=True)
+        return cors_response(jsonify({
             "success": False,
-            "message": f"Server error: {str(e)[:100]}"
-        }), 500
+            "message": "Internal server error",
+            "error": str(e) if app.debug else None
+        }), 500)
 
-# ------------------------
-# Helpers
-# ------------------------
-def clean_json_string(json_str):
-    """Minimal JSON cleanup (safe)"""
-    if not json_str:
-        return "{}"
-    json_str = json_str.strip()
-    json_str = re.sub(r"<[^>]+>", "", json_str)  # remove HTML only
-    return json_str
-
-def clean_url(url):
-    if not url:
-        return ""
-    return url.strip().strip('"').strip("'").replace("\\", "")
-
-def prepare_test_payload(service_key, payload, message):
-    payload = payload.copy()
-    key = service_key.upper()
-
-    handlers = {
-        "TELEGRAM": lambda p: {**p, "text": message, "parse_mode": "Markdown"},
-        "DISCORD": lambda p: {**p, "content": message},
-        "SLACK": lambda p: {**p, "text": message},
-        "MATTERMOST": lambda p: {**p, "text": message},
-        "ROCKET.CHAT": lambda p: {**p, "text": message},
-        "PUMBLE": lambda p: {**p, "text": message},
-        "FLOCK": lambda p: {**p, "text": message},
-        "ZULIP": lambda p: {
-            **p,
-            "content": message,
-            "type": p.get("type", "stream")
-        },
-        "MATRIX": lambda p: {
-            **p,
-            "msgtype": "m.text",
-            "body": message,
-            "formatted_body": message
-        },
-        "GOTIFY": lambda p: {**p, "message": message, "title": "Test Notification"},
-        "PUSHOVER": lambda p: {**p, "message": message, "title": "Test Notification"},
-        "PUSHBULLET": lambda p: {**p, "body": message, "title": "Test Notification"},
-        "NTFY": lambda p: {**p, "message": message, "title": "Test"},
-        "WEBNTFY": lambda p: {**p, "message": message},
-        "APPRISE": lambda p: {**p, "body": message, "type": "info"},
-    }
-
-    if key in handlers:
-        return handlers[key](payload)
-
-    for field in ("message", "text", "content", "body"):
-        if field in payload:
-            payload[field] = message
-            return payload
-
-    payload["message"] = message
-    return payload
-
-@app.route('/health')
+@app.route("/health")
 def health():
-    return jsonify({"status": "ok"})
+    return cors_response(jsonify({"status": "ok"}))
 
-# ------------------------
-# Errors
-# ------------------------
-@app.errorhandler(404)
-def not_found(_):
-    return jsonify({"success": False, "message": f"Route not found: {request.path}"}), 404
-
-@app.errorhandler(500)
-def internal_error(_):
-    return jsonify({"success": False, "message": "Internal server error"}), 500
-
-# ------------------------
-# Run
-# ------------------------
-    
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5299, debug=False, use_reloader=False)
