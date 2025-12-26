@@ -88,6 +88,7 @@ html {
   margin: 0;
   display: flex;
   justify-content: center;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -126,6 +127,98 @@ table input {
     border-radius: 4px;
 }
 
+/* ================= SCROLL NAVIGATION ================= */
+.scroll-nav {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: var(--msbkg);
+    border: 1px solid var(--mborder);
+    border-radius: 6px;
+    padding: 12px 6px;
+    z-index: 100;
+    max-height: 80vh;
+    overflow-y: auto;
+    width: 140px;
+    display: none;
+}
+
+.scroll-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.scroll-nav li {
+    margin: 4px 0;
+}
+
+.nav-link {
+    display: block;
+    padding: 6px 8px;
+    color: var(--mmenu);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-link:hover {
+    background: var(--mhbkg);
+    color: var(--primary);
+}
+
+.nav-link.active {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+}
+
+
+@media (min-width: 1024px) {
+    .scroll-nav, .help-text {
+        display: block;
+    }
+    body {
+        max-width: 700px;
+        margin-right: 160px;
+    }
+}
+
+/* Help text section for custom panel */
+.help-text {
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--mhbkg);
+    color: var(--mplaceholdertext);
+    border-radius: 6px;
+    border: 1px solid var(--mborder);
+    border-left: 3px solid var(--primary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.help-text p {
+    margin: 8px 0;
+    padding: 5px 0;
+}
+
+.help-text p:first-child {
+    margin-top: 0;
+}
+
+.help-text p:last-child {
+    margin-bottom: 0;
+}
+
+.help-text strong {
+    color: var(--mplaceholdertext);
+    font-weight: 600;
+}
 /* --- Base Icon Button Styles --- */
 .copy-icon,
 .download-icon,
@@ -190,8 +283,8 @@ table input {
 .download-icon.downloaded img.icon-svg,
 .test-icon:hover img.icon-svg,
 .clear-icon:hover img.icon-svg {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+    /*box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);*/
 }
 
 /* Test button specific animation */
@@ -239,7 +332,6 @@ table input {
     font-size: 0.9rem;
     z-index: 1000;
     max-width: 400px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     animation: slideIn 0.3s ease;
 }
 
@@ -275,7 +367,8 @@ table input {
 #zp-sub, #zp-api, #pb-token, #wn-channel,
 #wn-url, #ph-token, #ph-user_key, #gt-url,
 #gt-token, #nt-url, #nt-sub, #ap-url,
-#ap-conf, #mx-token, #mx-url, #mx-room  {
+#ap-conf, #mx-token, #mx-url, #mx-room,
+#cu-url, #cu-header, #cu-payload, #cu-format {
   width: 100%;
   font-family: monospace;
   background: var(--msbkg);
@@ -288,7 +381,8 @@ table input {
 #zp-sub:focus, #zp-api:focus, #pb-token:focus, #wn-channel:focus,
 #wn-url:focus, #ph-token:focus, #ph-user_key:focus, #gt-url:focus,
 #gt-token:focus, #nt-url:focus, #nt-sub:focus, #ap-url:focus,
-#ap-conf:focus, #mx-token:focus, #mx-url:focus, #mx-room:focus {
+#ap-conf:focus, #mx-token:focus, #mx-url:focus, #mx-room:focus,
+#cu-url:focus, #cu-header:focus, #cu-payload:focus, #cu-format:focus {
   outline: none;
   color: var(--mapp);
   background: var(--mhbkg);
@@ -301,6 +395,7 @@ table {
   border-collapse: collapse;
   margin-bottom: 2px;
   table-layout: fixed;
+  
 }
 
 th, td {
@@ -310,16 +405,28 @@ th, td {
   vertical-align: middle;
 }
 
-/* First column: 35% width */
+/* --- Mobile View (Default) --- */
 th:first-child,
 td:first-child {
-  width: 35%;
+  width: 40%;
 }
 
-/* Second column: 65% width */
 th:nth-child(2),
 td:nth-child(2) {
-  width: 65%;
+  width: 60%;
+}
+
+/* --- Desktop View --- */
+@media (min-width: 1024px) {
+  th:first-child,
+  td:first-child {
+    width: 20%;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 80%;
+  }
 }
 
 th {
@@ -392,7 +499,7 @@ select {
 footer.copyright {
   display: flex;
   justify-content: flex-end;
-  margin-top: 6px;
+  margin-top: 5px;
   color: var(--mborder);
   font-size: 0.8rem;
 }
