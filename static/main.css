@@ -42,6 +42,7 @@
         --mhbkg: #454545;
         --mhbor: #FF595E;
         --mborder: #666666;
+        --mfooter: #666666;
         --mactive: #B9B9C8;
         --minactive: #FF5C5F;
         --mexited: #F9B236;
@@ -68,6 +69,7 @@
         --mhbkg: #EEEEEE;
         --mhbor: #FF6368;
         --mborder: #CFCFCF;
+        --mfooter: #B3B3B3;
         --mmenu: #909090;
         --mactive: #5E6E18;
         --minactive: #FF5C5F;
@@ -500,6 +502,6 @@ footer.copyright {
   display: flex;
   justify-content: flex-end;
   margin-top: 5px;
-  color: var(--mborder);
+  color: var(--mfooter);
   font-size: 0.8rem;
 }
